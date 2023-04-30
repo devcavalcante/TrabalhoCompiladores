@@ -4,7 +4,7 @@ import src.parser.Parser;
 
 public class DL {
 	public static void main(String[] args) {
-        String input = "2+2-2*(2/2)";
+        String input = "a<";
         Parser parser = new Parser();
         boolean syntaxCorrect = parser.parse(input);
 

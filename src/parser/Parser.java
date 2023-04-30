@@ -1,5 +1,7 @@
 package src.parser;
 
+import java.util.regex.Pattern;
+
 public class Parser implements IParser{
     private String input;
     private int lookahead;
@@ -35,20 +37,14 @@ public class Parser implements IParser{
         if (lookahead() == c) {
             next();
         } else {
-            error("Esperando " + c + " porém foi encontrado" + lookahead());
+            error("Erro de sintaxe: esperava '" + c + "' mas encontrou '" + lookahead() + "'");
         }
     }
 
     @Override
     public void error(String msg) {
-        int col = lookahead + 1;
-        for (int i = lookahead - 1; i >= 0; i--) {
-            if (input.charAt(i) == '\n' || input.charAt(i) == '\r') {
-                break;
-            }
-            col--;
-        }
-        throw new RuntimeException("Error: " + msg + " na coluna " + col);
+        int col = (lookahead == 0) ? 1 : lookahead;
+        throw new RuntimeException("Syntax error: " + msg + " na coluna " + col);
     }
 
     @Override
@@ -118,6 +114,7 @@ public class Parser implements IParser{
                 break;
             default:
                 post();
+                break;
         }
     }
 
@@ -133,6 +130,7 @@ public class Parser implements IParser{
                 break;
             default:
                 factor();
+                break;            
         }
     }
 
@@ -141,18 +139,21 @@ public class Parser implements IParser{
             match('(');
             expr();
             match(')');
-        } else if (Character.isDigit(lookahead())) {
+        } else if (Pattern.matches("\\d", Character.toString(lookahead()))) {
             match(lookahead());
+            if (lookahead() == '>' || lookahead() == '<') {
+                error("Esperava um identificador mas encontrou '" + lookahead() + "'");
+            }
         } else {
             id();
         }
     }
 
     private void id() {
-        if (Character.isLetter(lookahead())) {
+        if (Pattern.matches("[a-z]", Character.toString(lookahead()))) {
             match(lookahead());
         } else {
-            error("Esperando ID porém foi encontrado " + lookahead());
+            error("erro");
         }
     }
 }
