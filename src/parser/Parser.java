@@ -62,35 +62,35 @@ public class Parser implements IParser{
 
     private void expr() {
         term();
-        exprPrime();
+        exprLine();
     }
 
-    private void exprPrime() {
+    private void exprLine() {
         if (lookahead() == '+') {
             match('+');
             term();
-            exprPrime();
+            exprLine();
         } else if (lookahead() == '-') {
             match('-');
             term();
-            exprPrime();
+            exprLine();
         }
     }
 
     private void term() {
         unary();
-        termPrime();
+        termLine();
     }
 
-    private void termPrime() {
+    private void termLine() {
         if (lookahead() == '*') {
             match('*');
             unary();
-            termPrime();
+            termLine();
         } else if (lookahead() == '/') {
             match('/');
             unary();
-            termPrime();
+            termLine();
         }
     }
 
