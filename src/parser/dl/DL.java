@@ -4,7 +4,7 @@ import src.parser.Parser;
 
 public class DL {
 	public static void main(String[] args) {
-        String input = "a<";
+        String input = "a<3";
         Parser parser = new Parser();
         boolean syntaxCorrect = parser.parse(input);
 
